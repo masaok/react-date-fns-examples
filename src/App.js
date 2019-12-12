@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css'
 
 // import format from 'date-fns/format'
@@ -12,6 +11,12 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+
+import {
+  format,
+  parse,
+  isValid
+} from 'date-fns';
 
 const useStyles = makeStyles({
   root: {
@@ -39,14 +44,49 @@ function App() {
 
   const classes = useStyles();
 
+  let results = []
+
+  let value, parsed, formatted
+
+  value = '2019-12-10'
+  parsed = parse(value, 'yyyy-MM-dd', new Date())
+  formatted = format(parsed, 'yyyy-MM-dd')
+
+  results.push({ value, parsed, formatted })
+
+  value = ''
+  parsed = parse(value, 'yyyy-MM-dd', new Date())
+  formatted = isValid(parsed) ? format(parsed, 'yyyy-MM-dd') : ''
+  // formatted = ''
+
+  results.push({ value, parsed, formatted })
 
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
+        <Paper className={classes.root}>
+          <Table className={classes.table} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>value</TableCell>
+                <TableCell>string</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {
+                results.map(result => {
+                  return (
+                    <TableRow key={result.value}>
+                      <TableCell>{result.value}</TableCell>
+                      <TableCell>{result.parsed.toString()}</TableCell>
+                      <TableCell>{result.formatted}</TableCell>
+                    </TableRow>
+                  )
+                })
+              }
+            </TableBody>
+          </Table>
+        </Paper>
         <table>
           <tr>
             <td>value</td>
